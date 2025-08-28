@@ -1,1 +1,1756 @@
- 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Signature Generator | Toaster Studio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Michroma&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Toaster Studio Brand Colors */
+            --white: #ffffff;
+            --black: #000000;
+            --base-primary: #1a1a1a;
+            --alt-primary: #2e2e2e;
+            --base-secondary: #000000;
+            --alt-secondary: #0d0d0d;
+            --accent: #ff0080;
+            --accent-var: #ec408c;
+            --accent-2: #00ffb0;
+            --accent-2-var: #56ffd2;
+            --grey: #bdbdbd;
+            --white-bg: #f8f8f8;
+            --onwhite: #dd006f;
+            
+            /* Typography */
+            --font-heading: 'Michroma', sans-serif;
+            --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--base-secondary);
+            color: var(--white);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--base-primary) 0%, var(--alt-primary) 100%);
+            border-radius: 12px;
+            padding: 48px;
+            margin-bottom: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
+            opacity: 0.1;
+            transform: translate(50%, -50%);
+        }
+
+        .header h1 {
+            font-family: var(--font-heading);
+            font-size: 2.5rem;
+            font-weight: 400;
+            color: var(--white);
+            margin-bottom: 8px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .header p {
+            font-size: 1.125rem;
+            color: var(--grey);
+            font-weight: 300;
+        }
+
+        /* Main Grid */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 380px 1fr;
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        /* Control Panel */
+        .control-panel {
+            background: var(--base-primary);
+            border-radius: 12px;
+            overflow: hidden;
+            height: fit-content;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .section {
+            padding: 24px;
+            border-bottom: 1px solid var(--alt-primary);
+        }
+
+        .section:last-child {
+            border-bottom: none;
+        }
+
+        .section-title {
+            font-family: var(--font-heading);
+            font-size: 0.875rem;
+            font-weight: 400;
+            color: var(--accent);
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.875rem;
+            color: var(--grey);
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            background: var(--alt-secondary);
+            border: 1px solid var(--alt-primary);
+            border-radius: 8px;
+            color: var(--white);
+            font-size: 0.875rem;
+            font-family: var(--font-body);
+            transition: all 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(255, 0, 128, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        /* Template Buttons */
+        .template-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .template-btn {
+            padding: 12px 8px;
+            background: var(--alt-secondary);
+            border: 1px solid var(--alt-primary);
+            border-radius: 8px;
+            color: var(--grey);
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .template-btn:hover {
+            background: var(--alt-primary);
+            border-color: var(--accent-var);
+            color: var(--white);
+        }
+
+        .template-btn.active {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: var(--white);
+        }
+
+        /* Color Palette */
+        .color-palette {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .color-swatch {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+            position: relative;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Dark colors get a light outline for visibility */
+        .color-swatch.dark {
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.4), 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .color-swatch:hover {
+            transform: scale(1.1) translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .color-swatch.dark:hover {
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.6), 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .color-swatch.active {
+            transform: scale(1.1);
+            box-shadow: 0 0 0 3px rgba(255, 0, 128, 0.4), 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .color-swatch.dark.active {
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.6), 0 0 0 3px rgba(255, 0, 128, 0.4), 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .color-swatch.active:hover {
+            transform: scale(1.15) translateY(-2px);
+        }
+
+        .color-swatch.active::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            text-shadow: 0 0 3px rgba(0, 0, 0, 1), 0 1px 2px rgba(0, 0, 0, 0.8);
+        }
+
+        /* Light colors get a dark checkmark */
+        .color-swatch.light.active::after {
+            color: #1a1a1a;
+            text-shadow: 0 0 2px rgba(255, 255, 255, 0.8);
+        }
+
+        .color-swatch.custom {
+            background: linear-gradient(135deg, 
+                #ff0000 0%, #ff8800 20%, 
+                #ffff00 40%, #00aa00 55%, 
+                #0066cc 70%, #8800ff 85%, 
+                #ff0080 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: var(--white);
+            font-weight: bold;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Preview Container */
+        .preview-container {
+            background: var(--base-primary);
+            border-radius: 12px;
+            padding: 32px;
+        }
+
+        .preview-title {
+            font-family: var(--font-heading);
+            font-size: 0.875rem;
+            color: var(--accent);
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--alt-primary);
+        }
+
+        .signature-preview {
+            background: var(--white);
+            border-radius: 8px;
+            padding: 32px;
+            min-height: 300px;
+            color: var(--base-primary);
+            overflow-x: auto;
+            overflow-y: hidden;
+        }
+
+        @media (max-width: 768px) {
+            .signature-preview {
+                padding: 20px;
+                min-height: 200px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .signature-preview {
+                padding: 16px;
+            }
+        }
+
+        .empty-state {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 300px;
+            color: var(--grey);
+            font-style: italic;
+        }
+
+        /* Action Buttons */
+        .actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .btn {
+            padding: 14px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: var(--font-body);
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-var);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(255, 0, 128, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--accent-2);
+            color: var(--base-primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--accent-2-var);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 255, 176, 0.3);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--white);
+            border: 1px solid var(--alt-primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--alt-primary);
+            border-color: var(--grey);
+        }
+
+        /* Code Display */
+        .code-container {
+            background: var(--base-primary);
+            border-radius: 12px;
+            padding: 32px;
+            margin-top: 24px;
+        }
+
+        .code-display {
+            background: var(--alt-secondary);
+            border: 1px solid var(--alt-primary);
+            border-radius: 8px;
+            padding: 20px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 0.75rem;
+            color: var(--grey);
+            overflow-x: auto;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        /* File Upload */
+        .file-upload {
+            position: relative;
+        }
+
+        .file-upload input[type="file"] {
+            display: none;
+        }
+
+        .file-upload-label {
+            display: block;
+            padding: 12px;
+            background: var(--alt-secondary);
+            border: 2px dashed var(--alt-primary);
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--grey);
+            font-size: 0.875rem;
+        }
+
+        .file-upload-label:hover {
+            border-color: var(--accent);
+            background: var(--alt-primary);
+            color: var(--white);
+        }
+
+        .file-upload-label.has-file {
+            border-style: solid;
+            border-color: var(--accent-2);
+            color: var(--accent-2);
+        }
+
+        /* Social Links */
+        .social-input-group {
+            display: grid;
+            grid-template-columns: 24px 1fr;
+            gap: 12px;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .social-icon {
+            width: 24px;
+            height: 24px;
+            background: var(--alt-primary);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: var(--grey);
+        }
+
+        /* Checkbox */
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--accent);
+        }
+
+        .checkbox-group label {
+            color: var(--grey);
+            font-size: 0.875rem;
+            margin: 0;
+        }
+
+        /* Success Message */
+        .success-message {
+            background: var(--accent-2);
+            color: var(--base-primary);
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            display: none;
+            font-weight: 600;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Template Gallery */
+        .template-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .template-preview-card {
+            background: var(--white);
+            border-radius: 8px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            min-height: 120px;
+            overflow: hidden;
+            border: 2px solid transparent;
+        }
+
+        .template-preview-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(255, 0, 128, 0.2);
+            border-color: var(--accent-var);
+        }
+
+        .template-preview-card.active {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(255, 0, 128, 0.1);
+            background: linear-gradient(135deg, rgba(255, 0, 128, 0.05), rgba(0, 255, 176, 0.05));
+        }
+
+        .template-preview-card.active .template-preview-label {
+            background: var(--accent-2);
+            color: var(--base-primary);
+        }
+
+        .template-preview-label {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: var(--accent);
+            color: var(--white);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            z-index: 2;
+            transition: all 0.3s ease;
+        }
+
+        .template-preview-content {
+            transform: scale(0.5);
+            transform-origin: top left;
+            width: 200%;
+            font-size: 10px;
+            pointer-events: none;
+            opacity: 0.9;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--alt-secondary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--alt-primary);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .control-panel {
+                max-height: none;
+            }
+            
+            .template-gallery {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 16px;
+            }
+            
+            .header {
+                padding: 32px 24px;
+            }
+            
+            .header h1 {
+                font-size: 1.75rem;
+            }
+            
+            .header p {
+                font-size: 1rem;
+            }
+            
+            .template-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .template-gallery {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+            
+            .actions {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+            
+            .section {
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 1.5rem;
+                letter-spacing: 1px;
+            }
+            
+            .template-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .template-gallery {
+                grid-template-columns: 1fr;
+            }
+            
+            .template-preview-card {
+                min-height: 100px;
+            }
+            
+            .color-palette {
+                justify-content: center;
+            }
+            
+            .social-input-group {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+            
+            .social-icon {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Email Signature Generator</h1>
+            <p>Create professional signatures with Toaster Studio's design system</p>
+        </header>
+
+        <div class="main-grid">
+            <aside class="control-panel">
+                <!-- Templates -->
+                <div class="section">
+                    <h2 class="section-title">Templates</h2>
+                    <div class="template-grid">
+                        <button class="template-btn active" onclick="loadTemplate('modern')">Modern</button>
+                        <button class="template-btn" onclick="loadTemplate('minimal')">Minimal</button>
+                        <button class="template-btn" onclick="loadTemplate('bold')">Bold</button>
+                        <button class="template-btn" onclick="loadTemplate('classic')">Classic</button>
+                        <button class="template-btn" onclick="loadTemplate('creative')">Creative</button>
+                        <button class="template-btn" onclick="loadTemplate('corporate')">Corporate</button>
+                    </div>
+                </div>
+
+                <!-- Brand Colors -->
+                <div class="section">
+                    <h2 class="section-title">Brand Colors</h2>
+                    <div class="color-palette">
+                        <div class="color-swatch dark" style="background: #000000;" onclick="selectColor('#000000', this)" title="Black"></div>
+                        <div class="color-swatch" style="background: #0066cc;" onclick="selectColor('#0066cc', this)" title="Blue"></div>
+                        <div class="color-swatch" style="background: #ff0000;" onclick="selectColor('#ff0000', this)" title="Red"></div>
+                        <div class="color-swatch" style="background: #00aa00;" onclick="selectColor('#00aa00', this)" title="Green"></div>
+                        <div class="color-swatch active" style="background: #ff0080;" onclick="selectColor('#ff0080', this)" title="Pink"></div>
+                        <div class="color-swatch" style="background: #ff8800;" onclick="selectColor('#ff8800', this)" title="Orange"></div>
+                        <div class="color-swatch" style="background: #666666;" onclick="selectColor('#666666', this)" title="Gray"></div>
+                        <div class="color-swatch custom" onclick="openColorPicker()" title="Custom Color">+</div>
+                    </div>
+                    <input type="color" id="customColorPicker" style="display: none;" onchange="selectColor(this.value)">
+                </div>
+
+                <!-- Personal Info -->
+                <div class="section">
+                    <h2 class="section-title">Personal Information</h2>
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" id="fullName" placeholder="John Smith" oninput="updateSignature()">
+                    </div>
+                    <div class="form-group">
+                        <label>Job Title</label>
+                        <input type="text" id="jobTitle" placeholder="Creative Director" oninput="updateSignature()">
+                    </div>
+                    <div class="form-group">
+                        <label>Profile Photo</label>
+                        <div class="file-upload">
+                            <input type="file" id="profilePhoto" accept="image/*" onchange="handleFileUpload(this)">
+                            <label for="profilePhoto" class="file-upload-label" id="profilePhotoLabel">
+                                Upload profile photo
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Company Info -->
+                <div class="section">
+                    <h2 class="section-title">Company Information</h2>
+                    <div class="form-group">
+                        <label>Company Name</label>
+                        <input type="text" id="companyName" placeholder="Toaster Studio" oninput="updateSignature()">
+                    </div>
+                    <div class="form-group">
+                        <label>Department</label>
+                        <input type="text" id="department" placeholder="Design Team" oninput="updateSignature()">
+                    </div>
+                    <div class="form-group">
+                        <label>Company Logo</label>
+                        <div class="file-upload">
+                            <input type="file" id="companyLogo" accept="image/*" onchange="handleFileUpload(this)">
+                            <label for="companyLogo" class="file-upload-label" id="companyLogoLabel">
+                                Upload company logo
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Info -->
+                <div class="section">
+                    <h2 class="section-title">Contact Details</h2>
+                    <div class="form-group">
+                        <label>Phone</label>
+                        <input type="tel" id="phone" placeholder="+1 (555) 123-4567" oninput="updateSignature()">
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="email" placeholder="john@toaster.studio" oninput="updateSignature()">
+                    </div>
+                    <div class="form-group">
+                        <label>Website</label>
+                        <input type="url" id="website" placeholder="www.toaster.studio" oninput="updateSignature()">
+                    </div>
+                    <div class="form-group">
+                        <label>Address</label>
+                        <textarea id="address" placeholder="123 Design Street, Creative City, CA 90210" oninput="updateSignature()"></textarea>
+                    </div>
+                </div>
+
+                <!-- Social Media -->
+                <div class="section">
+                    <h2 class="section-title">Social Media</h2>
+                    <div class="social-input-group">
+                        <div class="social-icon">in</div>
+                        <input type="url" id="linkedin" placeholder="linkedin.com/in/username" oninput="updateSignature()">
+                    </div>
+                    <div class="social-input-group">
+                        <div class="social-icon">X</div>
+                        <input type="url" id="twitter" placeholder="twitter.com/username" oninput="updateSignature()">
+                    </div>
+                    <div class="social-input-group">
+                        <div class="social-icon">IG</div>
+                        <input type="url" id="instagram" placeholder="instagram.com/username" oninput="updateSignature()">
+                    </div>
+                    <div class="social-input-group">
+                        <div class="social-icon">Be</div>
+                        <input type="url" id="behance" placeholder="behance.net/username" oninput="updateSignature()">
+                    </div>
+                </div>
+
+                <!-- Additional Options -->
+                <div class="section">
+                    <h2 class="section-title">Additional Options</h2>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="includeBanner" onchange="updateSignature()">
+                        <label for="includeBanner">Include promotional banner</label>
+                    </div>
+                    <div class="form-group" id="bannerGroup" style="display: none;">
+                        <label>Banner Image</label>
+                        <div class="file-upload">
+                            <input type="file" id="bannerImage" accept="image/*" onchange="handleFileUpload(this)">
+                            <label for="bannerImage" class="file-upload-label" id="bannerImageLabel">
+                                Upload banner image
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group" id="bannerLinkGroup" style="display: none;">
+                        <label>Banner Link</label>
+                        <input type="url" id="bannerLink" placeholder="https://toaster.studio/promo" oninput="updateSignature()">
+                    </div>
+                </div>
+            </aside>
+
+            <main class="preview-container">
+                <h2 class="preview-title">Template Gallery</h2>
+                <div class="template-gallery" id="templateGallery">
+                    <!-- Template previews will be generated here -->
+                </div>
+                
+                <div style="height: 2px; background: linear-gradient(90deg, var(--accent), var(--accent-2)); margin: 32px 0; opacity: 0.5;"></div>
+                
+                <h2 class="preview-title">Live Preview</h2>
+                <div class="signature-preview" id="signaturePreview">
+                    <div class="empty-state">Fill in your information to generate signature</div>
+                </div>
+                
+                <div class="actions">
+                    <button class="btn btn-primary" onclick="copyToClipboard()">Copy Signature</button>
+                    <button class="btn btn-secondary" onclick="downloadHTML()">Download HTML</button>
+                    <button class="btn btn-outline" onclick="resetForm()">Reset</button>
+                </div>
+            </main>
+        </div>
+
+        <div class="code-container">
+            <h2 class="preview-title">HTML Code</h2>
+            <div class="success-message" id="successMessage">
+                ✓ Signature copied to clipboard!
+            </div>
+            <div class="code-display" id="codeDisplay">
+                <!-- HTML code will appear here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let selectedColor = '#ff0080';  // Default to Toaster Studio pink
+        let selectedTemplate = 'modern';
+        const uploadedImages = {};
+
+        // Template configurations
+        const templates = {
+            modern: {
+                layout: 'horizontal',
+                style: 'clean',
+                spacing: 'normal'
+            },
+            minimal: {
+                layout: 'vertical',
+                style: 'simple',
+                spacing: 'compact'
+            },
+            bold: {
+                layout: 'horizontal',
+                style: 'strong',
+                spacing: 'wide'
+            },
+            classic: {
+                layout: 'vertical',
+                style: 'traditional',
+                spacing: 'normal'
+            },
+            creative: {
+                layout: 'mixed',
+                style: 'artistic',
+                spacing: 'dynamic'
+            },
+            corporate: {
+                layout: 'horizontal',
+                style: 'professional',
+                spacing: 'standard'
+            }
+        };
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set initial active color
+            const pinkSwatch = document.querySelector('[onclick*="#ff0080"]');
+            if (pinkSwatch) {
+                pinkSwatch.classList.add('active');
+            }
+            
+            generateTemplateGallery();
+            updateSignature();
+            
+            // Handle banner checkbox
+            document.getElementById('includeBanner').addEventListener('change', function() {
+                const bannerGroup = document.getElementById('bannerGroup');
+                const bannerLinkGroup = document.getElementById('bannerLinkGroup');
+                if (this.checked) {
+                    bannerGroup.style.display = 'block';
+                    bannerLinkGroup.style.display = 'block';
+                } else {
+                    bannerGroup.style.display = 'none';
+                    bannerLinkGroup.style.display = 'none';
+                }
+            });
+        });
+
+        // Generate template gallery
+        function generateTemplateGallery() {
+            const gallery = document.getElementById('templateGallery');
+            const templateNames = ['modern', 'minimal', 'bold', 'classic', 'creative', 'corporate'];
+            
+            // Sample data for previews
+            const sampleData = {
+                fullName: 'John Smith',
+                jobTitle: 'Creative Director',
+                companyName: 'Toaster Studio',
+                department: 'Design Team',
+                phone: '+1 (555) 123-4567',
+                email: 'john@toaster.studio',
+                website: 'www.toaster.studio',
+                address: '123 Design Street, CA',
+                linkedin: '#',
+                twitter: '#',
+                instagram: '#',
+                behance: '#'
+            };
+            
+            let galleryHTML = '';
+            
+            templateNames.forEach(templateName => {
+                let previewHTML = '';
+                
+                // Generate mini preview for each template
+                switch(templateName) {
+                    case 'modern':
+                        previewHTML = generateModernPreview(sampleData);
+                        break;
+                    case 'minimal':
+                        previewHTML = generateMinimalPreview(sampleData);
+                        break;
+                    case 'bold':
+                        previewHTML = generateBoldPreview(sampleData);
+                        break;
+                    case 'classic':
+                        previewHTML = generateClassicPreview(sampleData);
+                        break;
+                    case 'creative':
+                        previewHTML = generateCreativePreview(sampleData);
+                        break;
+                    case 'corporate':
+                        previewHTML = generateCorporatePreview(sampleData);
+                        break;
+                }
+                
+                const isActive = templateName === selectedTemplate ? 'active' : '';
+                
+                galleryHTML += `
+                    <div class="template-preview-card ${isActive}" onclick="selectTemplateFromGallery('${templateName}')">
+                        <div class="template-preview-label">${templateName}</div>
+                        <div class="template-preview-content">
+                            ${previewHTML}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            gallery.innerHTML = galleryHTML;
+        }
+
+        // Template preview generators (simplified versions)
+        function generateModernPreview(data) {
+            return `
+                <div style="display: flex; align-items: center;">
+                    <div style="flex: 1;">
+                        <div style="font-family: Michroma; font-size: 14px; color: #1a1a1a; margin-bottom: 4px;">${data.fullName}</div>
+                        <div style="font-size: 11px; color: ${selectedColor}; margin-bottom: 8px;">${data.jobTitle}</div>
+                        <div style="font-size: 10px; color: #6b7280;">
+                            📞 ${data.phone}<br>
+                            ✉️ ${data.email}
+                        </div>
+                    </div>
+                    <div style="width: 40px; height: 40px; background: #e5e7eb; border-radius: 50%; margin-left: 16px;"></div>
+                </div>
+            `;
+        }
+
+        function generateMinimalPreview(data) {
+            return `
+                <div>
+                    <div style="font-family: Michroma; font-size: 14px; color: #1a1a1a; margin-bottom: 4px;">${data.fullName}</div>
+                    <div style="font-size: 10px; color: #6b7280; margin-bottom: 4px;">${data.jobTitle}</div>
+                    <div style="height: 2px; background: linear-gradient(90deg, ${selectedColor}, #00ffb0); width: 60px; margin: 8px 0;"></div>
+                    <div style="font-size: 10px; color: #2e2e2e;">
+                        ${data.email}<br>
+                        ${data.phone}
+                    </div>
+                </div>
+            `;
+        }
+
+        function generateBoldPreview(data) {
+            return `
+                <div style="display: flex; align-items: stretch;">
+                    <div style="width: 3px; background: ${selectedColor}; margin-right: 12px;"></div>
+                    <div style="flex: 1;">
+                        <div style="font-family: Michroma; font-size: 16px; color: #1a1a1a; margin-bottom: 4px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">${data.fullName}</div>
+                        <div style="font-size: 12px; color: ${selectedColor}; margin-bottom: 4px; font-weight: 600;">${data.jobTitle}</div>
+                        <div style="font-size: 10px; color: #6b7280; margin-bottom: 12px;">${data.companyName}</div>
+                        <div style="display: flex; gap: 12px; font-size: 9px;">
+                            <div>
+                                <div style="color: ${selectedColor}; text-transform: uppercase; font-size: 8px; margin-bottom: 2px;">Phone</div>
+                                <div style="color: #2e2e2e;">${data.phone}</div>
+                            </div>
+                            <div>
+                                <div style="color: ${selectedColor}; text-transform: uppercase; font-size: 8px; margin-bottom: 2px;">Email</div>
+                                <div style="color: #2e2e2e; font-size: 8px;">${data.email}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function generateClassicPreview(data) {
+            return `
+                <div style="font-family: Georgia, serif;">
+                    <div style="font-size: 15px; color: #1a1a1a; font-weight: bold; margin-bottom: 4px;">${data.fullName}</div>
+                    <div style="font-size: 11px; color: #6b7280; font-style: italic; margin-bottom: 4px;">${data.jobTitle}</div>
+                    <div style="font-size: 12px; color: ${selectedColor}; margin-bottom: 8px;">${data.companyName}</div>
+                    <div style="font-size: 10px; color: #2e2e2e; border-bottom: 1px solid #e5e7eb; padding-bottom: 8px;">
+                        Phone: ${data.phone}<br>
+                        Email: ${data.email}
+                    </div>
+                </div>
+            `;
+        }
+
+        function generateCreativePreview(data) {
+            return `
+                <div>
+                    <div style="font-family: Michroma; font-size: 14px; background: linear-gradient(135deg, ${selectedColor}, #00ffb0); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 4px;">${data.fullName}</div>
+                    <div style="font-size: 11px; color: #2e2e2e; margin-bottom: 4px;">${data.jobTitle}</div>
+                    <div style="height: 2px; background: linear-gradient(135deg, ${selectedColor}, #00ffb0); width: 80px; margin: 8px 0;"></div>
+                    <div style="font-size: 10px; color: #2e2e2e;">
+                        📞 ${data.phone}<br>
+                        ✉️ ${data.email}
+                    </div>
+                    <div style="margin-top: 8px;">
+                        <span style="display: inline-block; width: 20px; height: 20px; background: #0077b5; border-radius: 50%; margin-right: 4px;"></span>
+                        <span style="display: inline-block; width: 20px; height: 20px; background: #000; border-radius: 50%; margin-right: 4px;"></span>
+                        <span style="display: inline-block; width: 20px; height: 20px; background: #e4405f; border-radius: 50%;"></span>
+                    </div>
+                </div>
+            `;
+        }
+
+        function generateCorporatePreview(data) {
+            return `
+                <div style="border: 1px solid #e5e7eb; padding: 8px;">
+                    <div style="border-bottom: 1px solid #e5e7eb; padding-bottom: 6px; margin-bottom: 6px;">
+                        <div style="font-size: 10px; color: #6b7280;">TOASTER STUDIO</div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <div>
+                            <div style="font-family: Michroma; font-size: 12px; color: #1a1a1a;">${data.fullName}</div>
+                            <div style="font-size: 10px; color: ${selectedColor};">${data.jobTitle}</div>
+                        </div>
+                        <div style="font-size: 9px; color: #2e2e2e; text-align: right;">
+                            T: ${data.phone}<br>
+                            E: ${data.email}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Select template from gallery
+        function selectTemplateFromGallery(templateName) {
+            selectedTemplate = templateName;
+            
+            // Update active states
+            document.querySelectorAll('.template-preview-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+            
+            // Update template buttons
+            document.querySelectorAll('.template-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.textContent.toLowerCase() === templateName) {
+                    btn.classList.add('active');
+                }
+            });
+            
+            updateSignature();
+        }
+
+        // Template selection
+        function loadTemplate(templateName) {
+            selectedTemplate = templateName;
+            
+            // Update active button
+            document.querySelectorAll('.template-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Update gallery preview cards
+            document.querySelectorAll('.template-preview-card').forEach(card => {
+                card.classList.remove('active');
+                if (card.onclick.toString().includes(templateName)) {
+                    card.classList.add('active');
+                }
+            });
+            
+            updateSignature();
+        }
+
+        // Color selection
+        function selectColor(color, element) {
+            selectedColor = color;
+            
+            // Update active color
+            document.querySelectorAll('.color-swatch').forEach(swatch => {
+                swatch.classList.remove('active');
+            });
+            
+            // Add active class to clicked element or custom if from picker
+            if (element) {
+                element.classList.add('active');
+            } else {
+                // This is from the color picker
+                const customSwatch = document.querySelector('.color-swatch.custom');
+                if (customSwatch) {
+                    customSwatch.classList.add('active');
+                    
+                    // Check if the selected color is dark and add appropriate class
+                    const rgb = hexToRgb(color);
+                    if (rgb) {
+                        const brightness = (rgb.r * 299 + rgb.g * 587 + rgb.b * 114) / 1000;
+                        if (brightness < 50) {
+                            customSwatch.classList.add('dark');
+                        } else {
+                            customSwatch.classList.remove('dark');
+                        }
+                    }
+                }
+            }
+            
+            // Regenerate template gallery with new color
+            generateTemplateGallery();
+            
+            updateSignature();
+        }
+
+        // Helper function to convert hex to RGB
+        function hexToRgb(hex) {
+            const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return result ? {
+                r: parseInt(result[1], 16),
+                g: parseInt(result[2], 16),
+                b: parseInt(result[3], 16)
+            } : null;
+        }
+
+        function openColorPicker() {
+            document.getElementById('customColorPicker').click();
+        }
+
+        // File upload handling
+        function handleFileUpload(input) {
+            const file = input.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    uploadedImages[input.id] = e.target.result;
+                    const label = document.getElementById(input.id + 'Label');
+                    label.textContent = '✓ ' + file.name;
+                    label.classList.add('has-file');
+                    updateSignature();
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Generate signature HTML
+        function generateSignatureHTML() {
+            const data = {
+                fullName: document.getElementById('fullName').value,
+                jobTitle: document.getElementById('jobTitle').value,
+                companyName: document.getElementById('companyName').value,
+                department: document.getElementById('department').value,
+                phone: document.getElementById('phone').value,
+                email: document.getElementById('email').value,
+                website: document.getElementById('website').value,
+                address: document.getElementById('address').value,
+                linkedin: document.getElementById('linkedin').value,
+                twitter: document.getElementById('twitter').value,
+                instagram: document.getElementById('instagram').value,
+                behance: document.getElementById('behance').value,
+                profilePhoto: uploadedImages['profilePhoto'],
+                companyLogo: uploadedImages['companyLogo'],
+                includeBanner: document.getElementById('includeBanner').checked,
+                bannerImage: uploadedImages['bannerImage'],
+                bannerLink: document.getElementById('bannerLink').value
+            };
+
+            if (!data.fullName && !data.companyName) {
+                return '';
+            }
+
+            // Generate different layouts based on selected template
+            switch(selectedTemplate) {
+                case 'minimal':
+                    return generateMinimalTemplate(data);
+                case 'bold':
+                    return generateBoldTemplate(data);
+                case 'classic':
+                    return generateClassicTemplate(data);
+                case 'creative':
+                    return generateCreativeTemplate(data);
+                case 'corporate':
+                    return generateCorporateTemplate(data);
+                case 'modern':
+                default:
+                    return generateModernTemplate(data);
+            }
+        }
+
+        // Modern Template - Horizontal layout with profile photo on right
+        function generateModernTemplate(data) {
+            let html = '<table cellpadding="0" cellspacing="0" style="font-family: Inter, -apple-system, BlinkMacSystemFont, sans-serif; width: 100%; max-width: 600px;">';
+            html += '<tr><td>';
+            html += '<table cellpadding="0" cellspacing="0" style="width: 100%;">';
+            html += '<tr>';
+            
+            // Content column (left side)
+            html += '<td style="vertical-align: top; padding-right: 20px;">';
+            
+            if (data.fullName) {
+                html += `<h2 style="font-family: Michroma, sans-serif; font-size: 18px; color: #1a1a1a; margin: 0 0 4px 0; font-weight: 400; text-transform: uppercase; letter-spacing: 1px;">${data.fullName}</h2>`;
+            }
+            
+            if (data.jobTitle) {
+                html += `<p style="font-size: 14px; color: ${selectedColor}; margin: 0 0 8px 0; font-weight: 500;">${data.jobTitle}</p>`;
+            }
+            
+            if (data.companyName) {
+                html += `<p style="font-size: 14px; color: #2e2e2e; margin: 0 0 16px 0;">${data.companyName}`;
+                if (data.department) html += ` | ${data.department}`;
+                html += '</p>';
+            }
+            
+            html += generateContactInfo(data);
+            html += generateSocialLinks(data);
+            html += '</td>';
+            
+            // Profile photo column (right side)
+            if (data.profilePhoto) {
+                html += `<td style="vertical-align: top; width: 80px;">
+                    <img src="${data.profilePhoto}" alt="Profile" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; display: block;">
+                </td>`;
+            }
+            
+            html += '</tr>';
+            
+            // Company logo row (below main content)
+            if (data.companyLogo) {
+                html += `<tr><td colspan="2" style="padding-top: 20px;">
+                    <img src="${data.companyLogo}" alt="Company Logo" style="max-width: 120px; max-height: 60px; display: block;">
+                </td></tr>`;
+            }
+            
+            html += '</table>';
+            html += '</td></tr>';
+            html += generateBanner(data);
+            html += '</table>';
+            
+            return html;
+        }
+
+        // Minimal Template - Simple vertical layout with gradient line
+        function generateMinimalTemplate(data) {
+            let html = '<table cellpadding="0" cellspacing="0" style="font-family: Inter, -apple-system, BlinkMacSystemFont, sans-serif; width: 100%; max-width: 500px;">';
+            html += '<tr><td>';
+            
+            // Content container with gradient bottom border
+            html += '<div style="padding-bottom: 16px; position: relative;">';
+            
+            if (data.fullName) {
+                html += `<div style="font-family: Michroma, sans-serif; font-size: 16px; color: #1a1a1a; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 1px;">${data.fullName}</div>`;
+            }
+            
+            if (data.jobTitle) {
+                html += `<div style="font-size: 13px; color: #6b7280; margin-bottom: 8px;">${data.jobTitle}`;
+                if (data.companyName) html += ` at ${data.companyName}`;
+                html += '</div>';
+            }
+            
+            // Gradient line under name/title
+            html += `<div style="height: 2px; background: linear-gradient(90deg, ${selectedColor}, #00ffb0); width: 100%; margin-bottom: 16px;"></div>`;
+            
+            html += '</div>';
+            
+            // Simple contact info
+            if (data.email) {
+                html += `<div style="font-size: 12px; margin-bottom: 4px;"><a href="mailto:${data.email}" style="color: ${selectedColor}; text-decoration: none;">${data.email}</a></div>`;
+            }
+            if (data.phone) {
+                html += `<div style="font-size: 12px; margin-bottom: 4px;"><a href="tel:${data.phone.replace(/\D/g, '')}" style="color: #2e2e2e; text-decoration: none;">${data.phone}</a></div>`;
+            }
+            if (data.website) {
+                const cleanUrl = data.website.replace(/^https?:\/\//, '');
+                const fullUrl = data.website.startsWith('http') ? data.website : 'https://' + data.website;
+                html += `<div style="font-size: 12px;"><a href="${fullUrl}" style="color: ${selectedColor}; text-decoration: none;">${cleanUrl}</a></div>`;
+            }
+            
+            html += '</td></tr>';
+            html += generateBanner(data);
+            html += '</table>';
+            
+            return html;
+        }
+
+        // Bold Template - Strong typography with accent bar
+        function generateBoldTemplate(data) {
+            let html = '<table cellpadding="0" cellspacing="0" style="font-family: Inter, -apple-system, BlinkMacSystemFont, sans-serif; width: 100%; max-width: 600px;">';
+            html += '<tr>';
+            
+            // Vertical accent bar
+            html += `<td style="width: 4px; background: linear-gradient(180deg, ${selectedColor}, ${selectedColor}dd); padding: 0; vertical-align: top;"></td>`;
+            
+            // Main content with padding
+            html += '<td style="padding: 20px 0 20px 24px;">';
+            
+            if (data.fullName) {
+                html += `<h1 style="font-family: Michroma, sans-serif; font-size: 22px; color: #1a1a1a; margin: 0 0 8px 0; font-weight: 400; text-transform: uppercase; letter-spacing: 2px; line-height: 1.2;">${data.fullName}</h1>`;
+            }
+            
+            if (data.jobTitle) {
+                html += `<p style="font-size: 15px; color: ${selectedColor}; margin: 0 0 4px 0; font-weight: 600;">${data.jobTitle}</p>`;
+            }
+            
+            if (data.companyName) {
+                html += `<p style="font-size: 14px; color: #6b7280; margin: 0 0 24px 0; font-weight: 500;">${data.companyName}`;
+                if (data.department) html += ` · ${data.department}`;
+                html += '</p>';
+            }
+            
+            // Contact info in a clean grid
+            html += '<table cellpadding="0" cellspacing="0" style="width: 100%;">';
+            html += '<tr>';
+            html += '<td style="vertical-align: top; padding-right: 40px; width: 50%;">';
+            
+            if (data.phone) {
+                html += `<div style="margin-bottom: 12px;">
+                    <div style="color: ${selectedColor}; font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 4px; font-weight: 700;">Phone</div>
+                    <div style="font-size: 13px; color: #2e2e2e;">
+                        <a href="tel:${data.phone.replace(/\D/g, '')}" style="color: #2e2e2e; text-decoration: none; font-weight: 500;">${data.phone}</a>
+                    </div>
+                </div>`;
+            }
+            
+            if (data.email) {
+                html += `<div style="margin-bottom: 12px;">
+                    <div style="color: ${selectedColor}; font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 4px; font-weight: 700;">Email</div>
+                    <div style="font-size: 13px; color: #2e2e2e;">
+                        <a href="mailto:${data.email}" style="color: #2e2e2e; text-decoration: none; font-weight: 500;">${data.email}</a>
+                    </div>
+                </div>`;
+            }
+            
+            html += '</td>';
+            html += '<td style="vertical-align: top; width: 50%;">';
+            
+            if (data.website) {
+                const cleanUrl = data.website.replace(/^https?:\/\//, '');
+                const fullUrl = data.website.startsWith('http') ? data.website : 'https://' + data.website;
+                html += `<div style="margin-bottom: 12px;">
+                    <div style="color: ${selectedColor}; font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 4px; font-weight: 700;">Website</div>
+                    <div style="font-size: 13px; color: #2e2e2e;">
+                        <a href="${fullUrl}" style="color: #2e2e2e; text-decoration: none; font-weight: 500;">${cleanUrl}</a>
+                    </div>
+                </div>`;
+            }
+            
+            if (data.address) {
+                html += `<div style="margin-bottom: 12px;">
+                    <div style="color: ${selectedColor}; font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 4px; font-weight: 700;">Address</div>
+                    <div style="font-size: 13px; color: #2e2e2e; font-weight: 500;">${data.address.replace(/\n/g, ', ')}</div>
+                </div>`;
+            }
+            
+            html += '</td>';
+            html += '</tr></table>';
+            
+            // Social links with sophisticated style
+            const socialLinks = [];
+            if (data.linkedin) socialLinks.push({ url: data.linkedin, icon: 'in' });
+            if (data.twitter) socialLinks.push({ url: data.twitter, icon: 'X' });
+            if (data.instagram) socialLinks.push({ url: data.instagram, icon: 'IG' });
+            if (data.behance) socialLinks.push({ url: data.behance, icon: 'Be' });
+            
+            if (socialLinks.length > 0) {
+                html += '<div style="margin-top: 24px; padding-top: 20px; border-top: 1px solid #e5e7eb;">';
+                socialLinks.forEach(social => {
+                    html += `<a href="${social.url}" style="display: inline-block; width: 32px; height: 32px; background: #1a1a1a; color: white; text-align: center; line-height: 32px; border-radius: 4px; margin-right: 8px; text-decoration: none; font-size: 13px; font-weight: bold;"
+                        onmouseover="this.style.background='${selectedColor}'" 
+                        onmouseout="this.style.background='#1a1a1a'">${social.icon}</a>`;
+                });
+                html += '</div>';
+            }
+            
+            html += '</td>';
+            
+            // Profile photo column (if available)
+            if (data.profilePhoto) {
+                html += `<td style="vertical-align: top; padding-left: 24px; width: 100px;">
+                    <img src="${data.profilePhoto}" alt="Profile" style="width: 90px; height: 90px; border-radius: 8px; object-fit: cover; display: block; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                </td>`;
+            }
+            
+            // Company logo (if available and no profile photo)
+            if (data.companyLogo && !data.profilePhoto) {
+                html += `<td style="vertical-align: middle; padding-left: 24px; text-align: right;">
+                    <img src="${data.companyLogo}" alt="Company Logo" style="max-width: 120px; max-height: 60px; display: block;">
+                </td>`;
+            }
+            
+            html += '</tr>';
+            html += generateBanner(data);
+            html += '</table>';
+            
+            return html;
+        }
+
+        // Classic Template - Traditional business layout
+        function generateClassicTemplate(data) {
+            let html = '<table cellpadding="0" cellspacing="0" style="font-family: Georgia, serif; width: 100%; max-width: 600px; border-bottom: 2px solid #2e2e2e; padding-bottom: 20px;">';
+            html += '<tr><td>';
+            
+            if (data.fullName) {
+                html += `<div style="font-size: 20px; color: #1a1a1a; margin-bottom: 4px; font-weight: bold;">${data.fullName}</div>`;
+            }
+            
+            if (data.jobTitle) {
+                html += `<div style="font-size: 14px; color: #6b7280; margin-bottom: 8px; font-style: italic;">${data.jobTitle}</div>`;
+            }
+            
+            if (data.companyName) {
+                html += `<div style="font-size: 16px; color: ${selectedColor}; margin-bottom: 16px; font-weight: 600;">${data.companyName}</div>`;
+            }
+            
+            // Two column contact layout
+            html += '<table cellpadding="0" cellspacing="0" style="font-size: 13px; color: #2e2e2e; width: 100%;">';
+            html += '<tr>';
+            html += '<td style="padding-right: 40px; vertical-align: top; width: 50%;">';
+            if (data.phone) html += `Phone: ${data.phone}<br>`;
+            if (data.email) html += `Email: ${data.email}`;
+            html += '</td>';
+            html += '<td style="vertical-align: top; width: 50%;">';
+            if (data.website) html += `Web: ${data.website.replace(/^https?:\/\//, '')}<br>`;
+            if (data.address) html += `Address: ${data.address.replace(/\n/g, ', ')}`;
+            html += '</td>';
+            html += '</tr></table>';
+            
+            html += '</td></tr>';
+            html += generateBanner(data);
+            html += '</table>';
+            
+            return html;
+        }
+
+        // Creative Template - Colorful and unique
+        function generateCreativeTemplate(data) {
+            let html = '<table cellpadding="0" cellspacing="0" style="font-family: Inter, -apple-system, BlinkMacSystemFont, sans-serif; width: 100%; max-width: 600px;">';
+            
+            // Content with gradient underline
+            html += '<tr><td>';
+            
+            if (data.fullName) {
+                html += `<h2 style="font-family: Michroma, sans-serif; font-size: 20px; background: linear-gradient(135deg, ${selectedColor}, #00ffb0); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin: 0 0 8px 0; text-transform: uppercase; letter-spacing: 1px; display: inline-block;">${data.fullName}</h2>`;
+            }
+            
+            if (data.jobTitle) {
+                html += `<p style="font-size: 14px; color: #2e2e2e; margin: 0 0 12px 0;">${data.jobTitle}</p>`;
+            }
+            
+            // Gradient line
+            html += `<div style="height: 3px; background: linear-gradient(135deg, ${selectedColor}, #00ffb0); margin-bottom: 20px; max-width: 200px;"></div>`;
+            
+            html += '</td></tr>';
+            
+            // Contact info with icons
+            html += '<tr><td>';
+            html += generateContactInfo(data);
+            
+            // Colorful social links
+            const socialLinks = [];
+            if (data.linkedin) socialLinks.push({ url: data.linkedin, icon: 'in', bg: '#0077b5' });
+            if (data.twitter) socialLinks.push({ url: data.twitter, icon: 'X', bg: '#000000' });
+            if (data.instagram) socialLinks.push({ url: data.instagram, icon: 'IG', bg: '#e4405f' });
+            if (data.behance) socialLinks.push({ url: data.behance, icon: 'Be', bg: '#1769ff' });
+            
+            if (socialLinks.length > 0) {
+                html += '<div style="margin-top: 16px;">';
+                socialLinks.forEach(social => {
+                    html += `<a href="${social.url}" style="display: inline-block; width: 32px; height: 32px; background: ${social.bg}; color: white; text-align: center; line-height: 32px; border-radius: 50%; margin-right: 8px; text-decoration: none; font-size: 14px; font-weight: bold;">${social.icon}</a>`;
+                });
+                html += '</div>';
+            }
+            
+            html += '</td></tr>';
+            html += generateBanner(data);
+            html += '</table>';
+            
+            return html;
+        }
+
+        // Corporate Template - Professional grid layout
+        function generateCorporateTemplate(data) {
+            let html = '<table cellpadding="0" cellspacing="0" style="font-family: Inter, -apple-system, BlinkMacSystemFont, sans-serif; width: 100%; max-width: 650px; border: 1px solid #e5e7eb; padding: 24px;">';
+            
+            // Header with company logo
+            if (data.companyLogo) {
+                html += '<tr><td style="padding-bottom: 20px; border-bottom: 1px solid #e5e7eb;">';
+                html += `<img src="${data.companyLogo}" alt="Company Logo" style="max-width: 150px; max-height: 50px; display: block;">`;
+                html += '</td></tr>';
+            }
+            
+            html += '<tr><td style="padding-top: 20px;">';
+            html += '<table cellpadding="0" cellspacing="0" style="width: 100%;">';
+            html += '<tr>';
+            
+            // Left column - Personal info
+            html += '<td style="vertical-align: top; width: 50%;">';
+            if (data.fullName) {
+                html += `<div style="font-family: Michroma, sans-serif; font-size: 16px; color: #1a1a1a; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 1px;">${data.fullName}</div>`;
+            }
+            if (data.jobTitle) {
+                html += `<div style="font-size: 13px; color: ${selectedColor}; margin-bottom: 4px; font-weight: 600;">${data.jobTitle}</div>`;
+            }
+            if (data.department) {
+                html += `<div style="font-size: 12px; color: #6b7280;">${data.department}</div>`;
+            }
+            html += '</td>';
+            
+            // Right column - Contact info
+            html += '<td style="vertical-align: top; width: 50%; text-align: right; font-size: 12px; color: #2e2e2e;">';
+            if (data.phone) html += `<div style="margin-bottom: 4px;">T: ${data.phone}</div>`;
+            if (data.email) html += `<div style="margin-bottom: 4px;">E: ${data.email}</div>`;
+            if (data.website) html += `<div>W: ${data.website.replace(/^https?:\/\//, '')}</div>`;
+            html += '</td>';
+            
+            html += '</tr></table>';
+            html += '</td></tr>';
+            
+            // Address footer
+            if (data.address) {
+                html += '<tr><td style="padding-top: 20px; border-top: 1px solid #e5e7eb; margin-top: 20px;">';
+                html += `<div style="font-size: 11px; color: #6b7280; text-align: center;">${data.address.replace(/\n/g, ' | ')}</div>`;
+                html += '</td></tr>';
+            }
+            
+            html += generateBanner(data);
+            html += '</table>';
+            
+            return html;
+        }
+
+        // Helper function for contact info
+        function generateContactInfo(data) {
+            let html = '<div style="font-size: 13px; color: #2e2e2e; line-height: 1.6;">';
+            
+            if (data.phone) {
+                html += `<div>📞 <a href="tel:${data.phone.replace(/\D/g, '')}" style="color: #2e2e2e; text-decoration: none;">${data.phone}</a></div>`;
+            }
+            
+            if (data.email) {
+                html += `<div>✉️ <a href="mailto:${data.email}" style="color: #2e2e2e; text-decoration: none;">${data.email}</a></div>`;
+            }
+            
+            if (data.website) {
+                const cleanUrl = data.website.replace(/^https?:\/\//, '');
+                const fullUrl = data.website.startsWith('http') ? data.website : 'https://' + data.website;
+                html += `<div>🌐 <a href="${fullUrl}" style="color: ${selectedColor}; text-decoration: none;">${cleanUrl}</a></div>`;
+            }
+            
+            if (data.address) {
+                html += `<div>📍 ${data.address.replace(/\n/g, ', ')}</div>`;
+            }
+            
+            html += '</div>';
+            return html;
+        }
+
+        // Helper function for social links
+        function generateSocialLinks(data) {
+            const socialLinks = [];
+            if (data.linkedin) socialLinks.push({ url: data.linkedin, icon: 'in' });
+            if (data.twitter) socialLinks.push({ url: data.twitter, icon: 'X' });
+            if (data.instagram) socialLinks.push({ url: data.instagram, icon: 'IG' });
+            if (data.behance) socialLinks.push({ url: data.behance, icon: 'Be' });
+            
+            if (socialLinks.length === 0) return '';
+            
+            let html = '<div style="margin-top: 16px;">';
+            socialLinks.forEach(social => {
+                html += `<a href="${social.url}" style="display: inline-block; width: 28px; height: 28px; background: ${selectedColor}; color: white; text-align: center; line-height: 28px; border-radius: 4px; margin-right: 8px; text-decoration: none; font-size: 12px; font-weight: bold;">${social.icon}</a>`;
+            });
+            html += '</div>';
+            
+            return html;
+        }
+
+        // Helper function for banner
+        function generateBanner(data) {
+            if (!data.includeBanner || !data.bannerImage) return '';
+            
+            let html = '<tr><td style="padding-top: 20px;">';
+            if (data.bannerLink) {
+                html += `<a href="${data.bannerLink}" style="display: block;">`;
+            }
+            html += `<img src="${data.bannerImage}" alt="Banner" style="width: 100%; max-width: 600px; height: auto; border-radius: 8px; display: block;">`;
+            if (data.bannerLink) {
+                html += '</a>';
+            }
+            html += '</td></tr>';
+            
+            return html;
+        }
+
+        // Update signature preview and code
+        function updateSignature() {
+            const html = generateSignatureHTML();
+            const preview = document.getElementById('signaturePreview');
+            const codeDisplay = document.getElementById('codeDisplay');
+            
+            if (html) {
+                preview.innerHTML = html;
+                codeDisplay.textContent = html;
+            } else {
+                preview.innerHTML = '<div class="empty-state">Fill in your information to generate signature</div>';
+                codeDisplay.textContent = '<!-- Your signature HTML will appear here -->';
+            }
+        }
+
+        // Copy to clipboard
+        function copyToClipboard() {
+            const html = generateSignatureHTML();
+            if (!html) {
+                alert('Please fill in your information first');
+                return;
+            }
+            
+            // Create temporary element
+            const temp = document.createElement('div');
+            temp.innerHTML = html;
+            document.body.appendChild(temp);
+            
+            // Select and copy
+            const range = document.createRange();
+            range.selectNode(temp);
+            window.getSelection().removeAllRanges();
+            window.getSelection().addRange(range);
+            
+            try {
+                document.execCommand('copy');
+                
+                // Show success message
+                const successMsg = document.getElementById('successMessage');
+                successMsg.style.display = 'block';
+                setTimeout(() => {
+                    successMsg.style.display = 'none';
+                }, 3000);
+            } catch (err) {
+                // Fallback for modern browsers
+                navigator.clipboard.writeText(html).then(() => {
+                    const successMsg = document.getElementById('successMessage');
+                    successMsg.style.display = 'block';
+                    setTimeout(() => {
+                        successMsg.style.display = 'none';
+                    }, 3000);
+                });
+            }
+            
+            // Clean up
+            window.getSelection().removeAllRanges();
+            document.body.removeChild(temp);
+        }
+
+        // Download HTML file
+        function downloadHTML() {
+            const html = generateSignatureHTML();
+            if (!html) {
+                alert('Please fill in your information first');
+                return;
+            }
+            
+            const fullHTML = `<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Email Signature</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Michroma&display=swap" rel="stylesheet">
+</head>
+<body>
+    ${html}
+</body>
+</html>`;
+            
+            const blob = new Blob([fullHTML], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'email-signature.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        // Reset form
+        function resetForm() {
+            if (confirm('Are you sure you want to reset all fields?')) {
+                document.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"], input[type="url"], textarea').forEach(input => {
+                    input.value = '';
+                });
+                document.querySelectorAll('input[type="file"]').forEach(input => {
+                    input.value = '';
+                    const label = document.getElementById(input.id + 'Label');
+                    label.textContent = label.textContent.replace('✓ ', 'Upload ');
+                    label.classList.remove('has-file');
+                });
+                document.getElementById('includeBanner').checked = false;
+                document.getElementById('bannerGroup').style.display = 'none';
+                document.getElementById('bannerLinkGroup').style.display = 'none';
+                
+                // Clear uploaded images
+                for (let key in uploadedImages) {
+                    delete uploadedImages[key];
+                }
+                
+                updateSignature();
+            }
+        }
+    </script>
+</body>
+</html>
